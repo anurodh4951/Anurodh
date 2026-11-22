@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f6f5ef">
+<meta name="description" content="A personal day planner that estimates your tasks, makes a realistic schedule, and leaves room for rest.">
+<title>Daywell — Your day, in good hands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f5ef;--paper:#fffefa;--ink:#252a23;--muted:#747a70;--line:#e3e3d9;--leaf:#cbe58d;--leaf2:#edf3df;--peach:#fff3e9;--serif:Georgia,serif;--sans:"DM Sans",system-ui,sans-serif;--mono:"DM Mono",monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:14px var(--sans);-webkit-font-smoothing:antialiased}button,input,select{font:inherit}a{color:inherit;text-decoration:none}button{color:inherit}::selection{background:var(--leaf)}
+.wrap{width:min(1400px,100%);margin:auto;padding-inline:clamp(20px,5vw,72px)}.mono,.eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em}.eyebrow{font-size:10px}.top{height:74px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;letter-spacing:-.08em}.brand-icon{width:25px;height:25px;border-radius:50% 50% 50% 8px;background:var(--leaf);display:grid;place-items:center;transform:rotate(-15deg)}.brand-icon:after{content:"✳";font-size:15px;transform:rotate(15deg)}
+.top-note{display:flex;align-items:center;gap:9px;color:var(--muted);font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase}.dot{width:7px;height:7px;border-radius:50%;background:#83a352;box-shadow:0 0 0 4px #83a35220}
+.hero{display:flex;justify-content:space-between;align-items:end;gap:35px;padding-top:clamp(54px,7vw,94px);padding-bottom:42px}.tag{display:flex;gap:9px;align-items:center;color:var(--muted);margin-bottom:20px}
+h1{font-weight:500;font-size:clamp(56px,8.5vw,108px);line-height:.9;letter-spacing:-.09em;margin:0}h1 em{font:italic 400 1em var(--serif);color:#738451;letter-spacing:-.085em}
+.hero p{max-width:350px;color:#62675e;font-size:14px;line-height:1.75;margin:0 0 4px}.hero p strong{color:var(--ink);font-weight:700}
+.grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(350px,.95fr);align-items:start;gap:24px;padding-bottom:62px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 44px #3037200a}.builder{padding:clamp(20px,3vw,34px)}
+.panel-head{display:flex;justify-content:space-between;align-items:start;gap:15px;margin-bottom:22px}.panel-head h2,.result-title{font-size:22px;font-weight:600;letter-spacing:-.06em;margin:5px 0 0}.step{padding:8px 10px;border-radius:20px;background:#f0f1e9;color:#626c54;font:9px var(--mono);text-transform:uppercase;white-space:nowrap}
+.sec-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-size:12px;font-weight:700}.settings{padding:15px;background:#f8f8f3;border:1px solid #e9eae1;border-radius:8px}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field-label{display:block;color:var(--muted);font:9px var(--mono);margin:0 0 6px;letter-spacing:.06em}
+input[type=time],input[type=date],input[type=number],input[type=text],select{width:100%;min-width:0;height:41px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);font-size:12px;outline:none}
+input:focus,select:focus{border-color:#819558;box-shadow:0 0 0 3px #cbe58d66}input::placeholder{color:#a4a89d}
+.breaks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.break-field{background:white;border:1px solid var(--line);border-radius:7px;padding:10px}.break-field label{display:block;color:var(--muted);font:8px var(--mono);letter-spacing:.06em;margin-bottom:8px}.inline{display:flex;align-items:center;gap:7px}.inline input{height:34px;text-align:center;padding:0 4px}.inline span{font-size:10px;color:var(--muted);white-space:nowrap}
+.meal{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:10px 12px;background:var(--peach);border:1px solid #f1e8dc;border-radius:7px}.meal input[type=checkbox]{accent-color:#819558}.meal label{font-size:11px;font-weight:600}.meal small{display:block;margin-top:3px;color:var(--muted);font-size:9px;font-weight:400}.meal-text{flex:1;min-width:145px}.meal-fields{display:flex;align-items:center;gap:5px}.meal-fields input{width:49px;height:32px;padding:0 4px;text-align:center;font-size:10px}.meal-fields span{color:var(--muted);font-size:9px}
+.tasks{margin-top:24px}.count{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:10px;font-weight:400}.count input{width:52px;height:33px;text-align:center;padding:0 4px;color:var(--ink);font-size:12px;font-weight:600}
+.task-list{display:grid;gap:8px}.task{display:grid;grid-template-columns:26px minmax(120px,1fr) minmax(102px,.72fr) minmax(82px,.55fr) 67px;align-items:center;gap:7px;padding:8px;border:1px solid var(--line);border-radius:8px;background:white}.num{width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:#f0f1e9;color:#768064;font:9px var(--mono)}.task input,.task select{height:38px;padding-inline:8px;font-size:10px}.estimate{padding:7px 5px;border-radius:5px;background:var(--leaf2);color:#5b6946;text-align:center;font:9px var(--mono);white-space:nowrap}
+.hint{margin:9px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
+.primary{width:100%;min-height:50px;display:flex;justify-content:center;align-items:center;gap:10px;margin-top:22px;border:1px solid var(--ink);border-radius:7px;background:var(--ink);color:white;font-size:12px;font-weight:700;cursor:pointer;transition:.18s}.primary:hover{background:var(--leaf);border-color:var(--leaf);color:var(--ink);transform:translateY(-1px)}.primary span{font-size:16px}.private{margin:10px 0 0;text-align:center;color:var(--muted);font-size:9px}
+.result{overflow:hidden;min-height:570px}.result-head{padding:23px 23px 16px;border-bottom:1px solid var(--line)}.result-line{display:flex;align-items:center;justify-content:space-between;gap:10px}.result-title{margin:0;font-size:21px}.date{height:33px!important;width:auto!important;border:0!important;background:#f4f4ee!important;padding:0 8px!important;font:9px var(--mono)!important}.sub{margin:6px 0 0;color:var(--muted);font-size:10px}
+.empty{padding:22px}.sample{display:grid;gap:8px;padding:16px;margin-bottom:19px;border-radius:8px;background:#f3f4ec}.sample-row{display:flex;align-items:center;gap:10px}.sample-time{width:35px;color:var(--muted);font:8px var(--mono)}.sample-event{flex:1;display:flex;justify-content:space-between;align-items:center;min-height:40px;padding:8px 10px;border-radius:5px;border-left:3px solid #9cb56b;background:white;box-shadow:0 2px 8px #00000008}.sample-event.rest{border-color:#d6a17e;background:#fff9f2}.sample-event span:first-child{font-size:9px;font-weight:700}.sample-event span:last-child{color:var(--muted);font:8px var(--mono)}
+.empty h3{font-size:15px;letter-spacing:-.04em;margin:0 0 7px}.empty p{max-width:390px;margin:0;color:var(--muted);font-size:10px;line-height:1.7}.benefits{display:grid;gap:9px;margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}.benefits div{display:flex;align-items:center;gap:8px;color:#596052;font-size:9px}.benefits b{width:17px;height:17px;display:grid;place-items:center;border-radius:50%;background:var(--leaf);font-size:9px}
+.results{display:none}.results.show{display:block}.empty.hide{display:none}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:14px;background:#fafaf6;border-bottom:1px solid var(--line)}.stat{padding:10px 8px;border:1px solid var(--line);border-radius:6px;background:white}.stat-label{color:var(--muted);font:8px var(--mono);letter-spacing:.06em}.stat strong{display:block;margin-top:6px;font-size:16px;letter-spacing:-.06em}.stat small{display:block;margin-top:2px;color:var(--muted);font-size:8px}
+.schedule-top{display:flex;align-items:center;justify-content:space-between;padding:16px 21px 7px}.schedule-top h3{font-size:11px;margin:0}.print{padding:6px 8px;border:1px solid var(--line);border-radius:5px;background:white;color:var(--muted);font-size:9px;cursor:pointer}.print:hover{color:var(--ink);border-color:#94a771}
+.timeline{position:relative;padding:7px 20px 17px}.timeline:before{content:"";position:absolute;top:15px;bottom:28px;left:79px;width:1px;background:#e2e5d9}
+.event{position:relative;display:grid;grid-template-columns:43px 1fr;gap:22px;padding-bottom:8px}.event-time{padding-top:12px;color:#6b7165;text-align:right;font:8px var(--mono)}.event-card{position:relative;padding:8px 10px;border:1px solid #e2e7d9;border-left:3px solid #9cb66b;border-radius:6px;background:#f9fbf4;min-height:43px}.event-card:before{content:"";position:absolute;top:13px;left:-29px;width:8px;height:8px;border:2px solid white;border-radius:50%;background:#9cb66b;box-shadow:0 0 0 1px #bfcca9}.event-card.rest{border-color:#f0e6dc;border-left-color:#d5a17f;background:#fff8f1}.event-card.rest:before{background:#d5a17f;box-shadow:0 0 0 1px #e8c4aa}.event-card.meal{border-color:#eee2d5;border-left-color:#b58c72;background:#faf4eb}.event-card.meal:before{background:#b58c72;box-shadow:0 0 0 1px #d8bda6}
+.event-main{display:flex;justify-content:space-between;gap:8px}.event-name{font-size:10px;font-weight:700;line-height:1.4}.event-kind{color:#7e8673;font:7px var(--mono);text-transform:uppercase;white-space:nowrap}.event-detail{display:block;margin-top:3px;color:var(--muted);font-size:8px}
+.overflow{display:none;margin:0 14px 14px;padding:11px;border:1px solid #efd0bd;border-radius:7px;background:#fff6f0}.overflow.show{display:block}.overflow strong{font-size:10px}.overflow p{margin:5px 0 0;color:#745d4d;font-size:9px;line-height:1.6}.leftovers{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.leftovers span{padding:4px 6px;border-radius:20px;background:#fae4d7;font-size:8px}
+.result-foot{display:flex;justify-content:space-between;gap:8px;padding:11px 20px 15px;border-top:1px solid var(--line);color:var(--muted);font-size:8px}.result-foot strong{color:var(--ink)}
+footer{border-top:1px solid var(--line)}.foot{min-height:67px;display:flex;align-items:center;justify-content:space-between;gap:16px}.foot-copy{color:var(--muted);font-size:9px}.foot-tag{color:var(--muted);font:8px var(--mono);letter-spacing:.06em}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}.result{min-height:0}.empty{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px}.sample{grid-row:span 2;margin:0}.benefits{margin-top:2px}}
+@media(max-width:660px){.top{height:62px}.top-note{display:none}.hero{display:block;padding-top:53px;padding-bottom:30px}.hero p{margin-top:20px;font-size:12px}.hero h1{font-size:clamp(55px,14vw,84px)}.builder{padding:18px 14px}.panel-head h2{font-size:19px}.settings{padding:12px}.breaks{gap:7px}.break-field{padding:9px 7px}.meal{gap:7px}.meal-text{min-width:135px}.task{grid-template-columns:25px 1fr 1fr;gap:6px;padding:7px}.num{grid-column:1;grid-row:1}.task input{grid-column:2/4}.task select:nth-of-type(1){grid-column:2}.task select:nth-of-type(2){grid-column:3}.estimate{grid-column:1/4;justify-self:end;padding:5px 9px}.empty{display:block;padding:16px}.sample{margin-bottom:17px}.stats{padding:10px 8px;gap:5px}.stat{padding:8px 6px}.stat strong{font-size:14px}.result-head{padding:18px 14px 13px}.schedule-top{padding-inline:14px}.timeline{padding-inline:12px}.timeline:before{left:69px}.event{grid-template-columns:38px 1fr;gap:19px}.event-card:before{left:-26px}.result-foot{padding-inline:13px}.foot{align-items:flex-start;flex-direction:column;justify-content:center;padding-block:13px;gap:5px}}
+@media print{body{background:white}.top,.hero,.builder,footer{display:none!important}main{padding:0}.wrap{width:100%;padding:0}.grid{display:block}.result{border:0;box-shadow:none}.empty{display:none!important}.results{display:block!important}.print{display:none}.event,.event-card,.stat{break-inside:avoid}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="brand" href="#" aria-label="Daywell home"><span class="brand-icon" aria-hidden="true"></span>daywell<sup style="font-size:8px;letter-spacing:0">®</sup></a>
+  <div class="top-note"><span class="dot" aria-hidden="true"></span>Your quietly capable day partner</div>
+  <a class="eyebrow" href="#planner">Plan my day ↗</a>
+</header>
+<main>
+  <section class="wrap hero">
+    <div><div class="tag eyebrow"><span class="dot" aria-hidden="true"></span>A little help for your day</div><h1>Your day, in<br><em>good hands.</em></h1></div>
+    <p>Tell me what’s on your list. I’ll estimate the time, shape it into a <strong>realistic schedule</strong>, and leave room for a proper pause.</p>
+  </section>
+  <section class="wrap grid" id="planner">
+    <form class="card builder" id="form">
+      <div class="panel-head"><div><span class="eyebrow" style="color:var(--muted)">First, the essentials</span><h2>Let’s set up your day.</h2></div><span class="step">● Your plan</span></div>
+      <div class="sec-title">When are you working?</div>
+      <div class="settings">
+        <div class="times">
+          <label><span class="field-label">START TIME</span><input id="start" type="time" value="08:30" required></label>
+          <label><span class="field-label">WIND DOWN BY</span><input id="finish" type="time" value="17:30" required></label>
+        </div>
+        <div class="breaks">
+          <div class="break-field"><label for="breakEvery">FOCUS BEFORE A REST</label><div class="inline"><input id="breakEvery" type="number" min="30" max="180" step="15" value="90"><span>minutes</span></div></div>
+          <div class="break-field"><label for="breakLength">SHORT REST</label><div class="inline"><input id="breakLength" type="number" min="5" max="30" step="5" value="10"><span>minutes</span></div></div>
+        </div>
+        <div class="meal">
+          <input type="checkbox" id="withMeal" checked>
+          <label class="meal-text" for="withMeal">Make room for a meal break<small>After a few good hours of work</small></label>
+          <div class="meal-fields" id="mealFields"><input id="mealAfter" type="number" min="2" max="6" step=".5" value="3.5" aria-label="Hours of work before meal"><span>hrs,</span><input id="mealLength" type="number" min="20" max="90" step="5" value="45" aria-label="Meal break minutes"><span>min</span></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="sec-title"><label for="count">What’s on your list?</label><span class="count">I have <input id="count" type="number" min="1" max="12" value="4" aria-label="Number of tasks"> things to do</span></div>
+        <div class="task-list" id="tasks"></div>
+        <p class="hint">Choose a task type and size. I’ll use that to make a starting estimate for you.</p>
+      </div>
+      <button class="primary" type="submit">Make me a thoughtful schedule <span aria-hidden="true">↗</span></button>
+      <p class="private">Your plan is private and stays in this browser.</p>
+    </form>
+
+    <section class="card result" id="result" aria-live="polite">
+      <div class="result-head"><div class="result-line"><h2 class="result-title" id="resultTitle">Your day at a glance</h2><label><span class="visually-hidden">Schedule date</span><input type="date" class="date" id="date"></label></div><p class="sub" id="subtitle">A calmer plan is just a few details away.</p></div>
+      <div class="empty" id="empty">
+        <div class="sample" aria-hidden="true">
+          <div class="sample-row"><span class="sample-time">09:00</span><div class="sample-event"><span>Focused work</span><span>60 min</span></div></div>
+          <div class="sample-row"><span class="sample-time">10:05</span><div class="sample-event rest"><span>A little breathing room</span><span>10 min</span></div></div>
+          <div class="sample-row"><span class="sample-time">12:30</span><div class="sample-event"><span>Make time for lunch</span><span>45 min</span></div></div>
+        </div>
+        <div><h3>You bring the to-do list.</h3><p>I’ll estimate the time, put each task in order, and weave in pauses so you’re not rushing straight from one thing into the next.</p>
+          <div class="benefits"><div><b>✓</b> Time estimates by task type and size</div><div><b>✓</b> Rest and meal breaks built right in</div><div><b>✓</b> A heads-up if the day is too full</div></div>
+        </div>
+      </div>
+      <div class="results" id="results">
+        <div class="stats">
+          <div class="stat"><span class="stat-label">YOUR WINDOW</span><strong id="windowStat">—</strong><small id="windowSub">workday</small></div>
+          <div class="stat"><span class="stat-label">PLANNED WORK</span><strong id="workStat">—</strong><small id="workSub">task time</small></div>
+          <div class="stat"><span class="stat-label">TIME TO REST</span><strong id="restStat">—</strong><small id="restSub">pauses + meal</small></div>
+        </div>
+        <div class="schedule-top"><h3>Your schedule</h3><button class="print" id="print" type="button">▧ &nbsp;Print my day</button></div>
+        <div class="timeline" id="timeline"></div>
+        <div class="overflow" id="overflow"><strong>There’s more on the list than fits today.</strong><p id="overflowText"></p><div class="leftovers" id="leftovers"></div></div>
+        <div class="result-foot"><span id="openTime">—</span><span><strong>5 minute breathers</strong> between tasks</span></div>
+      </div>
+    </section>
+  </section>
+</main>
+<footer><div class="wrap foot"><a class="brand" href="#"><span class="brand-icon" aria-hidden="true"></span>daywell</a><span class="foot-copy">A little more room in your day.</span><span class="foot-tag">MADE FOR HUMAN DAYS ✳</span></div></footer>
+<script>
+const presets={focus:{small:30,medium:60,large:90},admin:{small:15,medium:30,large:45},meeting:{small:30,medium:45,large:60},errand:{small:20,medium:40,large:60},personal:{small:15,medium:30,large:60}};
+const labels={focus:"Focused work",admin:"Admin",meeting:"Meeting",errand:"Errand",personal:"Personal"};
+const categories=[["focus","Focused work"],["admin","Admin"],["meeting","Meeting"],["errand","Errand"],["personal","Personal"]];
+const sizes=[["small","Small"],["medium","Medium"],["large","Large"]];
+const defaults={start:"08:30",finish:"17:30",breakEvery:90,breakLength:10,withMeal:true,mealAfter:3.5,mealLength:45,tasks:[{name:"",cat:"focus",size:"medium"},{name:"",cat:"admin",size:"medium"},{name:"",cat:"focus",size:"large"},{name:"",cat:"personal",size:"medium"}]};
+const key="daywell-planner-v1", $=s=>document.querySelector(s);
+let state=load();
+function load(){try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&Array.isArray(saved.tasks)&&saved.tasks.length)return {...defaults,...saved,tasks:saved.tasks.slice(0,12).map(t=>({name:String(t.name||""),cat:presets[t.cat]?t.cat:"focus",size:sizes.some(s=>s[0]===t.size)?t.size:"medium"}))}}catch(e){}return JSON.parse(JSON.stringify(defaults))}
+function persist(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+function esc(s){return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;")}
+function estimate(t){return presets[t.cat][t.size]}
+function options(items,value){return items.map(o=>'<option value="'+o[0]+'"'+(o[0]===value?" selected":"")+">"+o[1]+"</option>").join("")}
+function renderTasks(){ $("#count").value=state.tasks.length; $("#tasks").innerHTML=state.tasks.map((t,i)=>'<div class="task" data-i="'+i+'"><span class="num">'+String(i+1).padStart(2,"0")+'</span><label class="visually-hidden" for="name'+i+'">Task '+(i+1)+' name</label><input id="name'+i+'" data-field="name" type="text" maxlength="90" placeholder="e.g. Finish the proposal" value="'+esc(t.name)+'"><label class="visually-hidden" for="cat'+i+'">Task '+(i+1)+' type</label><select id="cat'+i+'" data-field="cat" aria-label="Task '+(i+1)+' type">'+options(categories,t.cat)+'</select><label class="visually-hidden" for="size'+i+'">Task '+(i+1)+' size</label><select id="size'+i+'" data-field="size" aria-label="Task '+(i+1)+' size">'+options(sizes,t.size)+'</select><span class="estimate" aria-label="About '+estimate(t)+' minutes">~ '+estimate(t)+' min</span></div>').join("");persist()}
+function applyState(){for(const id of ["start","finish","breakEvery","breakLength","withMeal","mealAfter","mealLength"]){const el=$("#"+id),field=id==="withMeal"?id:id; if(id==="withMeal")el.checked=!!state[field];else el.value=state[field]} $("#mealFields").style.opacity=state.withMeal?"1":".45";$("#mealFields").style.pointerEvents=state.withMeal?"auto":"none"}
+function read(){state.start=$("#start").value;state.finish=$("#finish").value;state.breakEvery=clamp(+$("#breakEvery").value||90,30,180);state.breakLength=clamp(+$("#breakLength").value||10,5,30);state.withMeal=$("#withMeal").checked;state.mealAfter=clamp(+$("#mealAfter").value||3.5,2,6);state.mealLength=clamp(+$("#mealLength").value||45,20,90);persist()}
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
+function mins(t){const [h,m]=t.split(":").map(Number);return h*60+m}
+function time(n){n=((n%1440)+1440)%1440;const h=Math.floor(n/60),m=n%60;return (h%12||12)+(m?":"+String(m).padStart(2,"0"):"")+(h>=12?" pm":" am")}
+function dur(n){const h=Math.floor(n/60),m=n%60;return h?(m?h+"h "+m+"m":h+"h"):m+"m"}
+function dateLabel(v){return new Intl.DateTimeFormat(undefined,{weekday:"long",month:"short",day:"numeric"}).format(new Date(v+"T12:00:00"))}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function plan(){
+ read();const start=mins(state.start),finish=mins(state.finish);
+ if(!state.start||!state.finish||finish<=start){$("#subtitle").textContent="Choose a wind down time after your start time.";$("#finish").setCustomValidity("Choose an end time after the start time.");$("#finish").reportValidity();$("#finish").setCustomValidity("");return}
+ const window=finish-start, tasks=state.tasks.map((t,i)=>({name:t.name.trim()||"Task "+(i+1),cat:t.cat,minutes:estimate(t)}));
+ let cursor=start,focus=0,sinceMeal=0,work=0,rest=0,mealDone=false;const events=[],left=[];
+ tasks.forEach((t,i)=>{if(cursor+t.minutes>finish){left.push(t);return}const begin=cursor;cursor+=t.minutes;work+=t.minutes;focus+=t.minutes;sinceMeal+=t.minutes;events.push({type:"task",title:t.name,kind:labels[t.cat],start:begin,end:cursor,minutes:t.minutes});
+ if(state.withMeal&&!mealDone&&sinceMeal>=state.mealAfter*60&&cursor+state.mealLength<=finish){events.push({type:"meal",title:"Lunch & a proper reset",kind:"MEAL BREAK",start:cursor,end:cursor+state.mealLength,minutes:state.mealLength});cursor+=state.mealLength;rest+=state.mealLength;mealDone=true;focus=0;sinceMeal=0}
+ else if(i<tasks.length-1&&focus>=state.breakEvery&&cursor+state.breakLength<=finish){events.push({type:"rest",title:"Step away for a moment",kind:"REST BREAK",start:cursor,end:cursor+state.breakLength,minutes:state.breakLength});cursor+=state.breakLength;rest+=state.breakLength;focus=0}
+ else if(i<tasks.length-1&&cursor+5<=finish){events.push({type:"rest",title:"A little breathing room",kind:"RESET",start:cursor,end:cursor+5,minutes:5});cursor+=5;rest+=5}
+ });
+ $("#timeline").innerHTML=events.map(e=>'<div class="event"><div class="event-time">'+time(e.start)+'</div><div class="event-card '+(e.type==="task"?"":e.type)+'"><div class="event-main"><span class="event-name">'+esc(e.title)+'</span><span class="event-kind">'+esc(e.kind)+'</span></div><span class="event-detail">'+time(e.start)+' – '+time(e.end)+' · '+dur(e.minutes)+'</span></div></div>').join("");
+ const leftMinutes=left.reduce((a,t)=>a+t.minutes,0),open=Math.max(0,window-work-rest);
+ $("#windowStat").textContent=dur(window);$("#windowSub").textContent=time(start)+" – "+time(finish);$("#workStat").textContent=dur(work);$("#workSub").textContent=(tasks.length-left.length)+" of "+tasks.length+" tasks";$("#restStat").textContent=dur(rest);$("#restSub").textContent=mealDone?dur(state.mealLength)+" meal + pauses":"pauses between tasks";$("#openTime").innerHTML="<strong>"+dur(open)+"</strong> open time in your day";
+ $("#overflow").classList.toggle("show",left.length>0);$("#overflowText").textContent=left.length?"About "+dur(leftMinutes)+" of work didn’t fit before "+time(finish)+". Try a longer day, smaller estimates, or move a task to tomorrow.":"";$("#leftovers").innerHTML=left.map(t=>"<span>"+esc(t.name)+" · "+t.minutes+" min</span>").join("");
+ $("#empty").classList.add("hide");$("#results").classList.add("show");$("#resultTitle").textContent="Your day is in good hands.";$("#subtitle").textContent=dateLabel($("#date").value)+" · "+(left.length?"A few things need more room.":"A thoughtful plan, with space to breathe.");
+}
+$("#tasks").addEventListener("input",e=>{const f=e.target.dataset.field;if(f==="name"){state.tasks[+e.target.closest(".task").dataset.i].name=e.target.value;persist()}});
+$("#tasks").addEventListener("change",e=>{const f=e.target.dataset.field;if(f!=="cat"&&f!=="size")return;const row=e.target.closest(".task"),i=+row.dataset.i;state.tasks[i][f]=e.target.value;const est=row.querySelector(".estimate"),n=estimate(state.tasks[i]);est.textContent="~ "+n+" min";est.setAttribute("aria-label","About "+n+" minutes");persist()});
+$("#count").addEventListener("change",e=>{const n=clamp(+e.target.value||1,1,12);while(state.tasks.length<n)state.tasks.push({name:"",cat:"focus",size:"medium"});state.tasks=state.tasks.slice(0,n);renderTasks()});
+["start","finish","breakEvery","breakLength","mealAfter","mealLength"].forEach(id=>$("#"+id).addEventListener("change",read));
+$("#withMeal").addEventListener("change",()=>{state.withMeal=$("#withMeal").checked;$("#mealFields").style.opacity=state.withMeal?"1":".45";$("#mealFields").style.pointerEvents=state.withMeal?"auto":"none";persist()});
+$("#form").addEventListener("submit",e=>{e.preventDefault();plan()});$("#print").addEventListener("click",()=>window.print());
+$("#date").addEventListener("change",()=>{if($("#results").classList.contains("show"))$("#subtitle").textContent=dateLabel($("#date").value)+" · A thoughtful plan, with space to breathe."});
+$("#date").value=today();applyState();renderTasks();
+</script>
+</body>
+</html>
